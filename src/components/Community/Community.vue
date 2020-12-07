@@ -15,43 +15,15 @@
     </div>
 
     <div class="users">
-      <div class="selected user" v-for="(user, index) in users" :key="index">
-        
-        <img :src="user.picture_url"/><span
-          class=""
-          >{{user.username}}</span
-        >
+      <div v-for="user in filterusers" :key="user.username">
+      <!-- //:class="{ 'selected': toggle }" @click="Select(user)"-->
+        <div :class="[ isSelected(user) ? 'selected user ' : 'user' ]" @click="toggleSelected(user)">
+          <img :src="user.picture_url"/><span
+            class=""
+            >{{user.username}}</span
+          >
+        </div>
       </div>
-      <!-- <div class="user">
-        <img src="https://source.unsplash.com/8wbxjJBrl3k/100x100" /><span
-          class=""
-          >Cha</span
-        >
-      </div>
-      <div class="user">
-        <img src="https://source.unsplash.com/FUcupae92P4/100x100" /><span
-          class="available"
-          >Derek</span
-        >
-      </div>
-      <div class="user">
-        <img src="https://source.unsplash.com/4U1x6459Q-s/100x100" /><span
-          class=""
-          >Emilio</span
-        >
-      </div>
-      <div class="selected user">
-        <img src="https://source.unsplash.com/3402kvtHhOo/100x100" /><span
-          class="available"
-          >Fabrice</span
-        >
-      </div>
-      <div class="user">
-        <img src="https://source.unsplash.com/OYH7rc2a3LA/100x100" /><span
-          class=""
-          >Gael</span
-        >
-      </div>-->
     </div>
 
     <div class="actions">
@@ -73,7 +45,9 @@ export default {
   name: "Community",
   data() {
     return {
-      search: ""
+      search: "",
+      selected: false,
+      selectedUser: []
     };
   },
   methods: {
@@ -84,16 +58,31 @@ export default {
       promise.finally(() => {
         console.log("Conversation ouverte !");
       });
+    },
+    toggleSelected(user){
+    
+      if(!this.selectedUser.includes(user.username)){
+        this.selectedUser.push(user.username);
+          console.log(this.selectedUser);
+      }else{
+        const index = this.selectedUser.indexOf(user.username);
+        if (index > -1) {
+          this.selectedUser.splice(index, 1);
+        }
+      }
+  
+    },
+    isSelected(user){ 
+        console.log("tete")
+        return this.selectedUser.includes(user.username);
+
     }
   },
   computed: {
     ...mapGetters(["users"]),
       filterusers() {
-        let filterusers = this.users;
-        filterusers = filterusers.filter(user =>
-          user.username.toLowerCase().includes(this.search.toLowerCase())
-        );
-        return filterusers;
+       return this.users.filter(user=>user.username.toLowerCase().includes(this.search.toLowerCase()));
+
       }
   }
 };
