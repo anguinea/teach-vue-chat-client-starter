@@ -6,21 +6,23 @@
           <input
             class="prompt"
             type="text"
-            placeholder="Rechercher un utilisateur"
+            placeholder="Rechercher un utilisateur" v-model="search"
           />
           <i class="search icon"></i>
         </div>
         <div class="results"></div>
       </div>
     </div>
+
     <div class="users">
-      <div class="selected user">
-        <img src="https://source.unsplash.com/7omHUGhhmZ0/100x100" /><span
+      <div class="selected user" v-for="(user, index) in users" :key="index">
+        
+        <img :src="user.picture_url"/><span
           class=""
-          >Bob</span
+          >{{user.username}}</span
         >
       </div>
-      <div class="user">
+      <!-- <div class="user">
         <img src="https://source.unsplash.com/8wbxjJBrl3k/100x100" /><span
           class=""
           >Cha</span
@@ -49,7 +51,7 @@
           class=""
           >Gael</span
         >
-      </div>
+      </div>-->
     </div>
 
     <div class="actions">
@@ -66,10 +68,13 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+
 export default {
   name: "Community",
   data() {
-    return {};
+    return {
+      search: ""
+    };
   },
   methods: {
     ...mapActions(["createOneToOneConversation"]),
@@ -82,7 +87,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["users"])
+    ...mapGetters(["users"]),
+      filterusers() {
+        let filterusers = this.users;
+        filterusers = filterusers.filter(user =>
+          user.username.toLowerCase().includes(this.search.toLowerCase())
+        );
+        return filterusers;
+      }
   }
 };
 </script>
