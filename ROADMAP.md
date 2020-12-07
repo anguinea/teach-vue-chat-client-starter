@@ -24,18 +24,18 @@
 
 - Afficher la liste des participants à une conversation (Conversation)
 
-## Niveau 1
+## Niveau 1 - DONE
 
-#- Afficher la liste des utilisateurs (Community) - Afficher leur photo > :src - Afficher leur nom
+- Afficher la liste des utilisateurs (Community) - Afficher leur photo > :src - Afficher leur nom
 
-#- Permettre de filtrer la liste des utilisateurs (Community)
+- Permettre de filtrer la liste des utilisateurs (Community)
 
 > data, v-model, computed
 
     - Permettre un filtrage insensible à la casse
       > String.toLowerCase()
 
-#- Permettre de toggle sélectionner des utilisateurs (Community)
+- Permettre de toggle sélectionner des utilisateurs (Community)
 
 > data, :class, classe "selected", @click
 

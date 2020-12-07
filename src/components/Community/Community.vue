@@ -27,11 +27,10 @@
     </div>
 
     <div class="actions">
-      <button class="ui primary big button" @click="openConversation">
+      <button class="ui primary big button" @click="openConversation" v-if="this.selectedUser.length > 0">
         <i class="conversation icon"></i>
-        <span>
-          Ouvrir la conversation (2)
-        </span>
+        <span v-if="open">Ouverture de la conversation...</span>
+        <span v-else>Ouvrir la conversation ({{this.selectedUser.length}})</span>
       </button>
     </div>
   </div>
@@ -47,23 +46,36 @@ export default {
     return {
       search: "",
       selected: false,
-      selectedUser: []
+      selectedUser: [],
+      open: false
     };
   },
   methods: {
-    ...mapActions(["createOneToOneConversation"]),
+    ...mapActions(["createOneToOneConversation", "createManyToManyConversation"]),
     openConversation() {
-      let promise = this.createOneToOneConversation("Alice");
+       
+      let promise;
+
+      if (this.selectedUser.length > 1){
+        promise = this.createManyToManyConversation(this.selectedUser);
+      
+
+      } else {
+        promise = this.createOneToOneConversation(this.selectedUser[0]);
+      }
 
       promise.finally(() => {
-        console.log("Conversation ouverte !");
+        this.open = !this.open;
+        console.log("Conversation ouverte ! " + this.open);
       });
+      
     },
+    
     toggleSelected(user){
     
       if(!this.selectedUser.includes(user.username)){
         this.selectedUser.push(user.username);
-          console.log(this.selectedUser);
+          
       }else{
         const index = this.selectedUser.indexOf(user.username);
         if (index > -1) {
@@ -73,7 +85,6 @@ export default {
   
     },
     isSelected(user){ 
-        console.log("tete")
         return this.selectedUser.includes(user.username);
 
     }

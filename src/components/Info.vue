@@ -9,5 +9,4 @@ name: "Info"
 </script>
 
 <style scoped>
-
 </style>
