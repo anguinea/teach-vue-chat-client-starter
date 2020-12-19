@@ -1,18 +1,27 @@
 <template>
   <div class="conversation">
     <div class="conversation-header">
-      <!--      <img-->
-      <!--        class="avatar"-->
-      <!--        src="https://source.unsplash.com/FUcupae92P4/100x100"-->
-      <!--      />-->
-      <div class="avatar">
+<!--
+<div  v-if="conversation.type === 'one_to_one'">
+        <img class="avatar" :src="getUserPicture(conversation.participants[1])"/>
+      </div>
+      <div v-else class="avatar">
         <i class="ui users icon"></i>
       </div>
-
+-->
       <div class="title">
         <div class="ui compact">
           <i class="icon circle"></i>
-          <span>Groupe: Alice, Bob</span>
+          <span>{{conversation.title}}</span>  
+      <!--   
+          <span v-if="conversation.participants.length === 2"> <span>{{conversation.participants[1]}}</span></span>
+           <span v-else>
+            Groupe:
+            <span v-for="(participant, index) in conversation.participants" :key="index">
+              {{index === conversation.participants.length - 1 ? participant : participant + "," }}
+            </span>
+          </span>
+        -->
           <div class="ui simple dropdown item">
             <i class="vertical ellipsis icon"></i>
 
@@ -379,7 +388,8 @@ export default {
     this.scrollBottom();
   },
   computed: {
-    ...mapGetters(["conversation"])
+    ...mapGetters(["conversation"]),
+
   },
   methods: {
     ...mapActions([]),
@@ -391,9 +401,21 @@ export default {
             "#scroll"
           ).scrollHeight;
         }
+
       }, 0);
-    }
+    },
+
+      getUserPicture(username) {
+      let parti = null;
+      this.users.forEach(user => {
+        if (user.username === username) {
+          parti = user;
+        }
+      });
+      return parti.picture_url;
+    },
   },
+
   watch: {
     // eslint-disable-next-line no-unused-vars
     conversation(newConversation, oldConversation) {

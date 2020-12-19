@@ -34,16 +34,53 @@ export default new Vuex.Store({
         //TODO
       }));
     },
-    conversations(state) {
+    conversations(state, getters) {
       return state.conversations.map((conversation) => {
+        let titre;
+
+        if (conversation.type === "many_to_many") {
+          titre = getters.getConversationTitle(conversation);
+        } else {
+          titre = conversation.participants[1];
+        }
+
         return {
-          ...conversation
+          ...conversation,
           //TODO
+          updated_at: new Date(conversation.updated_at),
+          title: titre
         };
       });
     },
     conversation(state, getters) {
-      //TODO
+      return getters.conversations.find(
+        (conversation) => conversation.id === state.currentConversationId
+      );
+    },
+
+    getConversationTitle: () => (conversation) => {
+      let title = conversation.title;
+
+      if (!title) {
+        title = "";
+
+        console.log(conversation);
+
+        for (let i = 0; i < conversation.participants.length; i++) {
+          //if participant === connected user
+          //then not store in title
+          //else
+          console.log(conversation.participants[i]);
+
+          if (i === conversation.participants.length - 1) {
+            title = title + conversation.participants[i];
+          } else {
+            title = title + conversation.participants[i] + ", ";
+          }
+        }
+      }
+
+      return title;
     }
   },
   mutations: {

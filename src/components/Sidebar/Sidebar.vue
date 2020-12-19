@@ -65,9 +65,9 @@
 
           <div class="content">
             <div class="metadata">
-              <div class="title" v-if="!conversation.title"><i class="ui small icon circle"> </i> Groupe: <span v-for="(participants, index) in conversation.participants" :key="index">{{ participants }}, </span></div>
+              <div class="title"><i class="ui small icon circle"> </i><span>{{ conversation.title }}</span></div>
             <!--<div class="title" ><i class="ui small icon circle"> </i> <span v-for="username in conversation.participants.filter(userimg => userimg !== user.username)" :key="username"> {{ username }} </span></div>-->
-              <span class="time">{{conversation.updated_at}}</span>
+              <span class="time">{{conversation.updated_at.toLocaleTimeString('fr-FR')}}</span>
             </div>
             <div class="text">{{ conversation.messages[conversation.messages.length -1] != null ? conversation.messages[conversation.messages.length -1]: "Nouvelle conversation" }}</div>
           </div>
@@ -83,7 +83,7 @@
           <div class="content">
             <div class="metadata">
               <div class="title"><i class="ui small icon circle"></i>{{ conversation.participants[1] }}</div>
-              <span class="time">{{conversation.updated_at}}</span>
+              <span class="time">{{conversation.updated_at.toLocaleTimeString('fr-FR')}}</span>
             </div>
             <div class="text">{{ conversation.messages[conversation.messages.length -1] != null ? conversation.messages[conversation.messages.length -1]: "Nouvelle conversation" }}</div>
           </div>
@@ -94,7 +94,7 @@
 
       
       
-      <div
+      <!--<div
         class="conversation"
         title="Groupe: Gael, Bob"
         @click="log()"
@@ -146,7 +146,7 @@
                 <div class="text">Nouvelle conversation</div>
               </div>
         </div>
-      </div>
+      </div>-->
       
     </div>
   </div>
@@ -174,7 +174,7 @@ export default {
           }
       });
 
-      return userimg.picture_url; //CA MARCHEEEEEEEE
+      return userimg.picture_url;
     },
     isSeen(conversation){
       console.log('seen: ' + conversation.seen);
@@ -188,21 +188,43 @@ export default {
     },
     openConversation(id) {
       router.push({ name: "Conversation", params: { id } });
+    },
+    ifMultiple(conv) {
+      let length = conv.participants.length;
+
+      if(conv.type === "one_to_one"){
+        
+        return conv.participants[1].toLowerCase().includes(this.search.toLowerCase());
+
+      } else {
+        let string = "";
+
+        for (let n = 1; n < length; n++) {
+          string = string + ' ' + conv.participants[n];
+        }
+
+        return string.toLowerCase().includes(this.search.toLowerCase());
+      }
     }
   },
   computed: {
     ...mapGetters(["user", "conversations", "users"]),
     filterConversations(){
-      let filteredConvs = this.conversations;
+      let filteredConvs = this.orderedConversations;
 
-      filteredConvs = filteredConvs.filter(conv =>
-          conv.participants[1].toLowerCase().includes(this.search.toLowerCase())
+      filteredConvs = filteredConvs.filter( conv =>
+          this.ifMultiple(conv)
       );
 
+      //console.log(filteredConvs);
       return filteredConvs;
     },
     orderedConversations: function () {
-      return _.sortBy(this.conversations, ['update_at'], ['desc'])
+      let array = [...this.conversations];
+
+      return array.sort((a, b) => {
+          return b.updated_at - a.updated_at
+      });
     }
   }
 };
