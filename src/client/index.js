@@ -40,6 +40,8 @@ export default function install(Vue, store) {
 
   client.on("messagePosted", async ({ conversation_id, message }) => {
     //TODO
+    console.log(message);
+    store.commit("upsertMessage", { conversation_id, message });
   });
 
   client.on("messageDelivered", async ({ conversation_id, message }) => {

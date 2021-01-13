@@ -14,7 +14,10 @@
       <span>Participants</span>
       <hr />
     </div>
-    <div class="user">
+
+    <div 
+    class="user"
+    >
       <img src="https://source.unsplash.com/mK_sjD0FrXw/100x100" /><span
         >Alice<br /><i class="nickname"></i></span
       ><i title="Modifier le surnom" class="circular quote left link icon"></i
@@ -24,6 +27,7 @@
         style=""
       ></i>
     </div>
+
     <div class="user">
       <img src="https://source.unsplash.com/7omHUGhhmZ0/100x100" /><span
         >Bob<br /><i class="nickname"></i></span
@@ -92,7 +96,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([])
+    ...mapGetters(["conversation"])
   },
   methods: {
     ...mapActions([])

@@ -57,43 +57,24 @@
         :title="conversation.title" 
         @click="openConversation(conversation.id)"
       >
-        <!-- MANY TO MANY -->
-        <div v-if="conversation.type === 'many_to_many'" style="display:flex">
-          <a class="avatar">
-            <span><i class="ui users icon"></i></span>
-          </a>
-
-          <div class="content">
-            <div class="metadata">
-              <div class="title"><i class="ui small icon circle"> </i><span>{{ conversation.title }}</span></div>
-            <!--<div class="title" ><i class="ui small icon circle"> </i> <span v-for="username in conversation.participants.filter(userimg => userimg !== user.username)" :key="username"> {{ username }} </span></div>-->
-              <span class="time">{{conversation.updated_at.toLocaleTimeString('fr-FR')}}</span>
-            </div>
-            <div class="text">{{ conversation.messages[conversation.messages.length -1] != null ? conversation.messages[conversation.messages.length -1]: "Nouvelle conversation" }}</div>
-          </div>
-          
-        </div>
-
-        <!-- ONE TO ONE -->
-        <div v-else style="display:flex">
-          <a class="avatar">
-            <img :src="getUserPicture(conversation.participants[1])" />
-          </a>
-
-          <div class="content">
-            <div class="metadata">
-              <div class="title"><i class="ui small icon circle"></i>{{ conversation.participants[1] }}</div>
-              <span class="time">{{conversation.updated_at.toLocaleTimeString('fr-FR')}}</span>
-            </div>
-            <div class="text">{{ conversation.messages[conversation.messages.length -1] != null ? conversation.messages[conversation.messages.length -1]: "Nouvelle conversation" }}</div>
-          </div>
         
+        <div style="display:flex">
+          <a class="avatar">
+            <span v-if="conversation.type === 'many_to_many'"><i class="ui users icon"></i></span>
+            <img v-else :src="getUserPicture(conversation.participants[1])" />
+          </a>
+
+          <div class="content">
+            <div class="metadata">
+              <div class="title"><i class="ui small icon circle"> </i> <span>{{ conversation.title }}</span></div>
+              <span class="time">{{conversation.updated_at.toLocaleTimeString('fr-FR')}}</span>
+            </div>
+            <div class="text">{{ conversation.messages[conversation.messages.length -1] != null ? conversation.messages[conversation.messages.length -1].content : "Nouvelle conversation" }}</div>
+          </div>
         </div>
         
       </div>
 
-      
-      
       <!--<div
         class="conversation"
         title="Groupe: Gael, Bob"

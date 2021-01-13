@@ -41,7 +41,11 @@ export default new Vuex.Store({
         if (conversation.type === "many_to_many") {
           titre = getters.getConversationTitle(conversation);
         } else {
-          titre = conversation.participants[1];
+          conversation.participants.forEach((element) => {
+            if (element !== state.user.username) {
+              titre = element;
+            }
+          });
         }
 
         return {
@@ -125,6 +129,22 @@ export default new Vuex.Store({
           ...conversation
         });
       }
+    },
+
+    upsertMessage(state, { conversation_id, message }) {
+      const localConversationIndex = state.conversations.findIndex(
+        (_conversation) => _conversation.id === conversation_id
+      );
+
+      let conversation = state.conversations.find(
+        (conv) => conv.id === conversation_id
+      );
+
+      if (localConversationIndex !== -1) {
+        conversation.messages.push({
+          ...message
+        });
+      }
     }
   },
   actions: {
@@ -198,6 +218,24 @@ export default new Vuex.Store({
         router.push({
           name: "Conversation",
           params: { id: conversation.id }
+        });
+      });
+
+      return promise;
+    },
+
+    createMessage({ commit }, { conversation_id, message }) {
+      console.log("createMessage: " + conversation_id + " " + message);
+
+      const promise = Vue.prototype.$client.postMessage(
+        conversation_id,
+        message
+      );
+
+      promise.then(({ conversation_id, message }) => {
+        commit("upsertMessage", {
+          conversation_id,
+          message
         });
       });
 

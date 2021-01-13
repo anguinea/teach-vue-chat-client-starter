@@ -50,41 +50,43 @@
 - Créer une page d'info avec le nom, la composition et la photo de votre groupe
   > vue-router, component
 
-## Niveau 2
+## Niveau 2 - DONE
 
-- Afficher la liste des conversations (Sidebar)
+- Afficher la liste des conversations (Sidebar) - DONE
 
   - Afficher photo+nom de l'utilisateur/groupe, et texte+heure du dernier message
+  - Date.toLocaleTimeString()
+  - .toLocaleDateString()
   - Trier la liste par heure de mise à jour décroissante
 
     > Array.sort
 
-- Pouvoir filter la liste des conversations (Sidebar)
+- Pouvoir filter la liste des conversations (Sidebar) - DONE
 
   > v-model, computed
 
-## Niveau 3
+## Niveau 3 - DONE
 
-- Afficher l'en-tête de la conversation (Conversation)
+- Afficher l'en-tête de la conversation (Conversation) - DONE
 
-  - Afficher une photo ou l'icône groupe selon le cas
-  - Afficher le titre de la conversation (par défaut, vaut le nom des participants)
+  - Afficher une photo ou l'icône groupe selon le cas - DONE
+  - Afficher le titre de la conversation (par défaut, vaut le nom des participants) - DONE
 
-- Recevoir en temps réel les nouveaux messages
+- Recevoir en temps réel les nouveaux messages - DONE
 
   > \$client.on('messagePosted')
 
 - Affichage simple des messages d'une conversation (Conversation)
 
-  - Différencier les messages de l'utilisateur de ceux des autres
+  - Différencier les messages de l'utilisateur de ceux des autres - DONE
     > classe "mine"
   - Afficher la photo de l'utilisateur auteur devant chaque message
 
-- Externaliser chaque message dans un composant <Message> dédié
+- Externaliser chaque message dans un composant <Message> dédié - DONE
 
   > component: v-bind/props, template
 
-- Pouvoir envoyer un message (Conversation)
+- Pouvoir envoyer un message (Conversation) - DONE
   > \$client.postMessage
 
 ## Niveau 4

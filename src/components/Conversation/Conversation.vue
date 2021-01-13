@@ -1,27 +1,17 @@
 <template>
   <div class="conversation">
     <div class="conversation-header">
-<!--
-<div  v-if="conversation.type === 'one_to_one'">
-        <img class="avatar" :src="getUserPicture(conversation.participants[1])"/>
+      
+      <div class="avatar" :style="{position:'relative'}">
+        <span v-if="conversation.type === 'many_to_many'"><i class="ui users icon"></i></span>
+        <img v-else :src="getUserPicture(Picture)" 
+        :style="{position:'absolute',left:0, height: '100%','border-radius': '100%' }"/>
       </div>
-      <div v-else class="avatar">
-        <i class="ui users icon"></i>
-      </div>
--->
+
       <div class="title">
         <div class="ui compact">
-          <i class="icon circle"></i>
-          <span>{{conversation.title}}</span>  
-      <!--   
-          <span v-if="conversation.participants.length === 2"> <span>{{conversation.participants[1]}}</span></span>
-           <span v-else>
-            Groupe:
-            <span v-for="(participant, index) in conversation.participants" :key="index">
-              {{index === conversation.participants.length - 1 ? participant : participant + "," }}
-            </span>
-          </span>
-        -->
+          <i class="icon circle" @click="consoleLog()"></i>
+          <span>{{ conversation.title }}</span>
           <div class="ui simple dropdown item">
             <i class="vertical ellipsis icon"></i>
 
@@ -55,8 +45,11 @@
     <div class="conversation-container">
       <div class="conversation-main">
         <div class="conversation-body" id="scroll">
-          <div class="wrapper">
-            <div class="time">01:32:08</div>
+          <div class="wrapper" v-for="message in conversation.messages" :key="message.id">
+
+              <Message v-bind:message="message" v-bind:user="user" />
+              
+          <!--<div class="time">01:32:08</div>
             <div class="message mine">
               <div class="bubble top bottom">Hello les amis !</div>
               <div class="reacts"></div>
@@ -330,7 +323,7 @@
                 title="Vu par Gael à 01:36:39"
                 src="https://source.unsplash.com/OYH7rc2a3LA/100x100"
               />
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -339,6 +332,7 @@
             Alice est en train d'écrire...
           </div>
         </div>
+
         <div class="conversation-footer">
           <div class="wrapper">
             <p>
@@ -355,6 +349,8 @@
                   class="prompt"
                   type="text"
                   placeholder="Rédiger un message"
+                  v-model="msg"
+                  @keyup.enter="sendMsg"
                 />
                 <i class="send icon"></i>
               </div>
@@ -362,23 +358,26 @@
           </div>
         </div>
       </div>
+
       <div class="conversation-sidebar" v-if="groupPanel">
         <Group />
       </div>
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>
 import Group from "@/components/Group/Group";
+import Message from "@/components/Message/Message";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Conversation",
-  components: { Group },
+  components: { Group, Message },
   data() {
     return {
-      groupPanel: false
+      groupPanel: false,
+      msg: ""
     };
   },
   mounted() {
@@ -388,11 +387,39 @@ export default {
     this.scrollBottom();
   },
   computed: {
-    ...mapGetters(["conversation"]),
+    ...mapGetters(["users","user","conversation"]),
+
+    Picture(){
+      let picture = this.user.username;
+
+      this.conversation.participants.forEach(element => {
+        
+          if(element !== this.user.username){
+            picture = element;
+          }
+      });
+
+      return picture;
+    },
 
   },
   methods: {
-    ...mapActions([]),
+    ...mapActions(["createMessage"]),
+
+    sendMsg(){
+      let promise;
+      //console.log('msg: ' + this.msg);
+
+      promise = this.createMessage({
+        conversation_id: this.conversation.id,
+        message: this.msg
+      });
+
+      promise.finally(() => {
+        this.msg = "";
+      });
+    },
+
     scrollBottom() {
       setTimeout(() => {
         let scrollElement = document.querySelector("#scroll");
@@ -401,21 +428,27 @@ export default {
             "#scroll"
           ).scrollHeight;
         }
-
       }, 0);
     },
 
-      getUserPicture(username) {
-      let parti = null;
-      this.users.forEach(user => {
-        if (user.username === username) {
-          parti = user;
-        }
-      });
-      return parti.picture_url;
+    consoleLog(){
+      console.log(this.conversation);
+      console.log(this.users);
     },
-  },
 
+    getUserPicture(username) {
+      let userimg = null;
+      this.users.forEach(user => {
+          if(user.username === username){
+              userimg = user;
+          }
+      });
+
+      return userimg.picture_url;
+    },
+
+    
+  },
   watch: {
     // eslint-disable-next-line no-unused-vars
     conversation(newConversation, oldConversation) {
