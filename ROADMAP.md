@@ -80,7 +80,7 @@
 
   - Différencier les messages de l'utilisateur de ceux des autres - DONE
     > classe "mine"
-  - Afficher la photo de l'utilisateur auteur devant chaque message
+  - Afficher la photo de l'utilisateur auteur devant chaque message - DONE
 
 - Externaliser chaque message dans un composant <Message> dédié - DONE
 
@@ -91,31 +91,31 @@
 
 ## Niveau 4
 
-- Pouvoir voir les participants d'une conversation (Group)
+- Pouvoir voir les participants d'une conversation (Group) - DONE
 
   > computed
 
-- Pouvoir voir les non-participants d'une conversation (Group)
+- Pouvoir voir les non-participants d'une conversation (Group) - DONE
 
   > computed
 
-- Pouvoir filtrer les utilisateurs dans la vue des participants (Group)
+- Pouvoir filtrer les utilisateurs dans la vue des participants (Group) - DONE
 
   > v-model, computed
 
-- Recevoir en temps réel l'ajout d'un participant à une conversation (Group)
+- Recevoir en temps réel l'ajout d'un participant à une conversation (Group) - DONE
 
   > \$client.on('participantAdded')
 
-- Pouvoir ajouter un participant d'une conversation ManyToMany (Group)
+- Pouvoir ajouter un participant d'une conversation ManyToMany (Group) - DONE
 
   > \$client.addParticipant
 
-- Recevoir en temps réel le retrait d'un participant à une conversation (Group)
+- Recevoir en temps réel le retrait d'un participant à une conversation (Group) - DONE
 
   > \$client.on('participantRemoved')
 
-- Pouvoir retirer un participant d'une conversation ManyToMany (si il y a plus de 3 participants) (Group)
+- Pouvoir retirer un participant d'une conversation ManyToMany (si il y a plus de 3 participants) (Group) - DONE
   > \$client.removeParticipant
 
 ## Niveau 5

@@ -6,7 +6,9 @@
           type="text"
           placeholder="Rechercher un utilisateur"
           class="prompt"
-        /><i class="search icon"></i>
+          v-model="search"
+        />
+        <i class="search icon"></i>
       </div>
     </div>
     <div class="spanner">
@@ -15,72 +17,35 @@
       <hr />
     </div>
 
-    <div 
-    class="user"
-    >
-      <img src="https://source.unsplash.com/mK_sjD0FrXw/100x100" /><span
-        >Alice<br /><i class="nickname"></i></span
-      ><i title="Modifier le surnom" class="circular quote left link icon"></i
-      ><i
-        title="Enlever de la conversation"
-        class="circular times icon link"
-        style=""
-      ></i>
-    </div>
+    <div v-for="groupUser in UsersInGroup" :key="groupUser.username">
+      <div class="user">
+        <img :src="groupUser.picture_url" />
+        <span>{{groupUser.username}}<br /><i class="nickname"></i></span>
+          <i title="Modifier le surnom" class="circular quote left link icon"></i>
 
-    <div class="user">
-      <img src="https://source.unsplash.com/7omHUGhhmZ0/100x100" /><span
-        >Bob<br /><i class="nickname"></i></span
-      ><i title="Modifier le surnom" class="circular quote left link icon"></i
-      ><i
-        title="Enlever de la conversation"
-        class="circular times icon link"
-        style=""
-      ></i>
+          <i v-if="conversation.participants.length > 3" title="Enlever de la conversation" 
+          class="circular times icon link" 
+          style=""  
+          v-on:click="DeleteSomeone(groupUser.username)"></i>
+      </div>
     </div>
-    <div class="user">
-      <img src="https://source.unsplash.com/FUcupae92P4/100x100" /><span
-        >Derek<br /><i class="nickname"></i></span
-      ><i title="Modifier le surnom" class="circular quote left link icon"></i
-      ><i
-        title="Enlever de la conversation"
-        class="circular times icon link"
-      ></i>
-    </div>
-    <div class="user">
-      <img src="https://source.unsplash.com/OYH7rc2a3LA/100x100" /><span
-        >Gael<br /><i class="nickname"></i></span
-      ><i title="Modifier le surnom" class="circular quote left link icon"></i
-      ><i
-        title="Enlever de la conversation"
-        class="circular times icon link"
-        style=""
-      ></i>
-    </div>
+    
     <div class="spanner">
       <hr />
       <span>Communauté</span>
       <hr />
     </div>
-    <div class="user">
-      <img src="https://source.unsplash.com/8wbxjJBrl3k/100x100" /><span
-        >Cha</span
-      ><i title="Ajouter à la conversation" class="circular plus icon link"></i>
-    </div>
-    <div class="user">
-      <img src="https://source.unsplash.com/4U1x6459Q-s/100x100" /><span
-        >Emilio</span
-      ><i title="Ajouter à la conversation" class="circular plus icon link"></i>
-    </div>
-    <div class="user">
-      <img src="https://source.unsplash.com/3402kvtHhOo/100x100" /><span
-        >Fabrice</span
-      ><i title="Ajouter à la conversation" class="circular plus icon link"></i>
-    </div>
-    <div class="user">
-      <img src="https://source.unsplash.com/tNCH0sKSZbA/100x100" /><span
-        >Benji</span
-      ><i title="Ajouter à la conversation" class="circular plus icon link"></i>
+
+    <div v-for="groupUser in UsersOutGroup"  :key="groupUser.username">
+      <div class="user">
+        <img :src="groupUser.picture_url" />
+        <span>{{groupUser.username}}</span>
+        <i 
+        title="Ajouter à la conversation" 
+        class="circular plus icon link"
+        v-on:click="AddSomeone(groupUser.username)"
+        ></i>
+      </div>
     </div>
   </div>
 </template>
@@ -92,14 +57,72 @@ export default {
   name: "Group",
   data() {
     return {
-      search: ""
+      search: "",
     };
   },
   computed: {
-    ...mapGetters(["conversation"])
+    ...mapGetters(["conversation", "users"]),
+
+    UsersInGroup(){
+        let array = [];
+
+        this.conversation.participants.forEach(element => {
+          this.users.find(user => { 
+
+            if (user.username === element) 
+            { array.push(user) }
+
+            return false;
+          })
+        });
+        return array.filter(user=>user.username.toLowerCase().includes(this.search.toLowerCase()));
+    },
+
+    UsersOutGroup(){
+      let array = [];
+      this.users.forEach(user => {
+        let exist = this.conversation.participants.some(element => {
+          return element === user.username;
+        })
+
+        if(!exist){
+          array.push(user);
+        }
+      })
+      return array.filter(user=>user.username.toLowerCase().includes(this.search.toLowerCase()));
+    }
   },
   methods: {
-    ...mapActions([])
+    ...mapActions(["AddParticipant", "DeleteParticipant"]),
+    
+    AddSomeone(username){
+      let promise;
+  
+      promise = this.AddParticipant({
+        username: username,
+        conversation: this.conversation
+      });
+
+      promise.finally(() => {
+        console.log("AAAAAAAAAAA");
+        //TODO
+      });
+    },
+
+    DeleteSomeone(username){
+      let promise;
+  
+      promise = this.DeleteParticipant({
+        username: username,
+        conversation: this.conversation
+      });
+
+      promise.finally(() => {
+        console.log("AAAAAAAAAAA");
+        //TODO
+      });
+    }
+
   }
 };
 </script>

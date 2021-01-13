@@ -57,11 +57,10 @@
         :title="conversation.title" 
         @click="openConversation(conversation.id)"
       >
-        
         <div style="display:flex">
           <a class="avatar">
             <span v-if="conversation.type === 'many_to_many'"><i class="ui users icon"></i></span>
-            <img v-else :src="getUserPicture(conversation.participants[1])" />
+            <img v-else :src="getUserPicture(conversation.participants)" />
           </a>
 
           <div class="content">
@@ -147,7 +146,15 @@ export default {
   },
   methods: {
     ...mapActions(["deauthenticate"]),
-    getUserPicture(username) {
+    getUserPicture(array) {
+      let username;
+      array.forEach(element => {
+        
+          if(element !== this.user.username){
+            username = element;
+          }
+      });
+
       let userimg = null;
       this.users.forEach(user => {
           if(user.username === username){
@@ -206,7 +213,9 @@ export default {
       return array.sort((a, b) => {
           return b.updated_at - a.updated_at
       });
-    }
+    },
+
+    
   }
 };
 </script>
