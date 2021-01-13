@@ -73,60 +73,6 @@
         </div>
         
       </div>
-
-      <!--<div
-        class="conversation"
-        title="Groupe: Gael, Bob"
-        @click="log()"
-      >
-        <a class="avatar">
-          <span>
-            <i class="users icon"> </i>
-          </span>
-        </a>
-        <div class="content">
-          <div class="metadata">
-            <div class="title">Groupe: Gael, Bob</div>
-            <span class="time">01:36:38</span>
-          </div>
-          <div class="text">Incroyable !</div>
-        </div>
-      </div>
-
-      <div
-        class="conversation available"
-        title="Cha"
-        @click="openConversation(0)">
-        <a class="avatar">
-          <img src="https://source.unsplash.com/8wbxjJBrl3k/100x100" />
-        </a>
-        <div class="content">
-          <div class="metadata">
-            <div class="title"><i class="ui small icon circle"> </i> Cha</div>
-            <span class="time">01:47:50</span>
-          </div>
-          <div class="text">Nouvelle conversation</div>
-        </div>
-      </div>
-
-      <div
-        class="conversation selected"
-        title="Derek"
-        @click="openConversation(0)"
-      >
-      <div style="display:flex">
-              <a class="avatar">
-                <img src="https://source.unsplash.com/FUcupae92P4/100x100" />
-              </a>
-              <div class="content">
-                <div class="metadata">
-                  <div class="title">Derek</div>
-                  <span class="time">01:48:00</span>
-                </div>
-                <div class="text">Nouvelle conversation</div>
-              </div>
-        </div>
-      </div>-->
       
     </div>
   </div>

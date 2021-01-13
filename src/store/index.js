@@ -37,9 +37,13 @@ export default new Vuex.Store({
     conversations(state, getters) {
       return state.conversations.map((conversation) => {
         let titre;
-
+        console.log(state.user.username);
+        console.log("ducoup");
         if (conversation.type === "many_to_many") {
-          titre = getters.getConversationTitle(conversation);
+          titre = getters.getConversationTitle(
+            conversation,
+            state.user.username
+          );
         } else {
           conversation.participants.forEach((element) => {
             if (element !== state.user.username) {
@@ -62,26 +66,27 @@ export default new Vuex.Store({
       );
     },
 
-    getConversationTitle: () => (conversation) => {
+    getConversationTitle: () => (conversation, connected) => {
       let title = conversation.title;
 
       if (!title) {
         title = "";
 
         console.log(conversation);
+        console.log(connected);
+        let i = 0;
 
-        for (let i = 0; i < conversation.participants.length; i++) {
-          //if participant === connected user
-          //then not store in title
-          //else
-          console.log(conversation.participants[i]);
-
-          if (i === conversation.participants.length - 1) {
-            title = title + conversation.participants[i];
-          } else {
-            title = title + conversation.participants[i] + ", ";
+        conversation.participants.forEach((user) => {
+          if (user !== connected) {
+            if (i === conversation.participants.length - 1) {
+              title = title + user;
+            } else {
+              title = title + user + ", ";
+            }
           }
-        }
+
+          i++;
+        });
       }
 
       return title;
@@ -227,7 +232,7 @@ export default new Vuex.Store({
     },
 
     createMessage({ commit }, { conversation_id, message }) {
-      console.log("createMessage: " + conversation_id + " " + message);
+      console.log("createMessage: " + conversation_id + " " + message + " ");
 
       const promise = Vue.prototype.$client.postMessage(
         conversation_id,

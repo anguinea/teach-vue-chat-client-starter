@@ -93,7 +93,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["AddParticipant", "DeleteParticipant"]),
+    ...mapActions(["AddParticipant", "DeleteParticipant","createMessage"]),
     
     AddSomeone(username){
       let promise;
@@ -105,7 +105,20 @@ export default {
 
       promise.finally(() => {
         console.log("AAAAAAAAAAA");
-        //TODO
+        //TODO notif "Gaetan à rejoint le groupe"
+        /*console.log(this.conversation);
+
+        let msg = {
+          content : username + " vient de rejoindre le groupe !",
+          edited: false,
+          from: username,
+          posted_at: new Date(),
+          deleted: false,
+          reactions: [],
+          reply_to: null
+      };
+
+        this.conversation.messages.push(msg);*/
       });
     },
 
@@ -118,8 +131,22 @@ export default {
       });
 
       promise.finally(() => {
-        console.log("AAAAAAAAAAA");
         //TODO
+       /* console.log(this.conversation);
+
+        let msg = {
+          content : "L'utilisateur a quitté la conversation.",
+          edited: false,
+          from: username,
+          posted_at: new Date(),
+          deleted: false,
+          reactions: [],
+          reply_to: null
+      };
+
+        this.conversation.messages.push(msg);*/
+        
+        
       });
     }
 
